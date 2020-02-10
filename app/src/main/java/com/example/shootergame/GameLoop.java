@@ -12,7 +12,7 @@ class GameLoop extends Thread {
     private double avgUPS;
     private double avgFPS;
     private final double UPSmax = 30.0;
-    private final double UPSperiod = 1E-3 / UPSmax;
+    private final double UPSperiod = 1E+3 / UPSmax;
 
     public GameLoop(Game game, SurfaceHolder surfaceHolder) {
         this.game = game;
@@ -27,7 +27,7 @@ class GameLoop extends Thread {
         return this.avgFPS;
     }
 
-    public void start() {
+    public void startLoop() {
         isrunning = true;
         start();
     }
@@ -53,17 +53,17 @@ class GameLoop extends Thread {
                 synchronized (surfaceHolder) {
                     game.update();
                     updatecount++;
-                    game.draw();
-                }
 
-            } catch (IllegalArgumentException e){
+                    game.draw(canvas);
+                }
+            } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             } finally {
-                if (canvas != null) {
+                if(canvas != null) {
                     try {
                         surfaceHolder.unlockCanvasAndPost(canvas);
                         framecount++;
-                    } catch (IllegalArgumentException e) {
+                    } catch(Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -92,8 +92,8 @@ class GameLoop extends Thread {
 
             passedtime = System.currentTimeMillis() - starttime;
             if (passedtime >= 1000) {
-                avgUPS = updatecount / 1E-3*passedtime;
-                avgFPS = framecount / 1E-3*passedtime;
+                avgUPS = updatecount / (1E-3*passedtime);
+                avgFPS = framecount / (1E-3*passedtime);
                 framecount = 0;
                 updatecount = 0;
                 starttime = System.currentTimeMillis();

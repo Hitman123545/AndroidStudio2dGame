@@ -11,8 +11,8 @@ import androidx.core.content.ContextCompat;
 
 class Game extends SurfaceView implements SurfaceHolder.Callback {
 
-    GameLoop gameLoop = new GameLoop();
-    Context context;
+    GameLoop gameLoop;
+    Player player;
 
     public Game(Context context) {
         super(context);
@@ -20,8 +20,9 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
 
-        gameLoop = new GameLoop();
-        this.context = context;
+        gameLoop = new GameLoop(this, surfaceHolder);
+
+        player = new Player();
 
         setFocusable(true);
     }
@@ -31,7 +32,8 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        gameLoop.start();
+
+        gameLoop.startLoop();
     }
 
     @Override
@@ -49,26 +51,31 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         super.draw(canvas);
         drawFPS(canvas);
         drawUPS(canvas);
+
+        player.draw(canvas);
+
     }
 
     public void drawUPS (Canvas canvas){
         String avgUPS = Double.toString(gameLoop.getAvgUPS());
         Paint paint = new Paint();
-        int color = ContextCompat.getColor(context, R.color.green);
+        int color = ContextCompat.getColor(getContext(), R.color.green);
         paint.setColor(color);
         paint.setTextSize(40);
-        canvas.drawText("UPS: "+avgUPS, 100, 20, paint );
+        canvas.drawText("UPS: "+avgUPS, 100, 40, paint );
     }
 
     public void drawFPS (Canvas canvas){
         String avgFPS = Double.toString(gameLoop.getAvgFPS());
         Paint paint = new Paint();
-        int color = ContextCompat.getColor(context, R.color.green);
+        int color = ContextCompat.getColor(getContext(), R.color.green);
         paint.setColor(color);
         paint.setTextSize(40);
-        canvas.drawText("UPS: "+avgFPS, 100, 200, paint );
+        canvas.drawText("FPS: "+avgFPS, 100, 200, paint );
     }
 
     public void update() {
+
+        player.update();
     }
 }
