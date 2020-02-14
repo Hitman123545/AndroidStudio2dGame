@@ -3,6 +3,7 @@ package com.example.shootergame;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -22,12 +23,27 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         gameLoop = new GameLoop(this, surfaceHolder);
 
-        player = new Player();
+        player = new Player(getContext(), 500, 500, 40);
 
         setFocusable(true);
     }
 
-    public static void draw() {
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        switch (event.getAction()) {
+
+            case MotionEvent.ACTION_DOWN:
+                player.setPosition((double) event.getX(),(double) event.getY());
+                return true;
+            case MotionEvent.ACTION_MOVE:
+                player.setPosition((double) event.getX(),(double) event.getY());
+                return true;
+
+
+        }
+
+        return super.onTouchEvent(event);
     }
 
     @Override
