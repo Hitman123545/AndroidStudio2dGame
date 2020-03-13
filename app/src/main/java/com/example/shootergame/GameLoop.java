@@ -11,8 +11,8 @@ class GameLoop extends Thread {
     private SurfaceHolder surfaceHolder;
     private double avgUPS;
     private double avgFPS;
-    private final double UPSmax = 30.0;
-    private final double UPSperiod = 1E+3 / UPSmax;
+    public static final double UPSmax = 30.0;
+    private static final double UPSperiod = 1E+3 / UPSmax;
 
     public GameLoop(Game game, SurfaceHolder surfaceHolder) {
         this.game = game;
